@@ -62,14 +62,20 @@ function goBackToRegistration() {
 
 async function resendVerificationCode() {
     try {
-        const email = window._registrationState?.email;
-        if (!email) throw new Error('Email не найден');
+        let email = window._registrationState?.email;
+        let userId = window._registrationState?.userId;
+        
+        // Если _registrationState не установлен, используем текущего пользователя
+        if (!email || !userId) {
+            const { auth } = window.firebaseApp.getFirebaseServices();
+            const user = auth.currentUser;
+            if (!user) throw new Error('Пользователь не авторизован');
+            email = user.email;
+            userId = user.uid;
+        }
 
         // Generate new code and send
         const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-        const userId = window._registrationState?.userId;
-        
-        if (!userId) throw new Error('User ID не найден');
 
         const { db } = window.firebaseApp.getFirebaseServices();
         

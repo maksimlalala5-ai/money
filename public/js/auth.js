@@ -26,7 +26,7 @@ async function initializeAuth() {
                         const userData = userDoc.data();
                         
                         // Проверяем: требуется ли верификация email?
-                        if (userData.emailVerified === false && !window._registrationState?.skipVerificationCheck) {
+                        if (false && userData.emailVerified === false && !window._registrationState?.skipVerificationCheck) { // Временно отключено для тестирования
                             console.log('📧 Email требует верификации - показываем модаль верификации');
                             // Пользователь зарегистрирован, но email не верифицирован
                             // Показываем страницу приветствия, не приложение
