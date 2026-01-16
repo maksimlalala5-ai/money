@@ -703,5 +703,6 @@ window.Auth = {
     updateUserProfile,
     getCurrentUser: () => currentUser,
     handleRegistrationWithUI,
-    resetPassword
+    resetPassword,
+    batchDeleteUnverifiedUsers
 };
