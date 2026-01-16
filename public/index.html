@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money in Sight - Умный контроль финансов</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💰</text></svg>"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+<body>
+   <div id="welcomePage">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">MS</div>
+                        <span>Money in Sight</span>
+                    </div>
+                    
+                    <div class="header-actions">
+    <button class="btn btn-outline" id="welcomeLoginBtn">Войти</button>
+    <button class="btn btn-primary" id="welcomeRegisterBtn">Начать 14 дней бесплатно</button>
+</div>
+
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <div class="user-info">
+                            <div class="user-name" id="userName">Пользователь</div>
+                            <div class="user-email" id="userEmail">user@example.com</div>
+                        </div>
+                        <button class="btn btn-outline" id="logoutBtn" style="margin-left: 10px;">Выйти</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title">Деньги под контролем</h1>
+                <p class="hero-subtitle">
+                    Умный финансовый трекер, который поможет вам управлять бюджетом, 
+                    достигать целей и понимать свои финансы лучше
+                </p>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline" id="welcomeLoginBtn">Войти</button>
+                    <button class="btn btn-primary" id="welcomeRegisterBtn">Начать 14 дней бесплатно</button>
+                </div>
+
+                <div class="trust-indicators">
+                    <div class="trust-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Безопасно и конфиденциально</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>Мгновенная синхронизация</span>
+                    </div>
+                    <div class="trust-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Доступ с любого устройства</span>
+                    </div>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">98%</div>
+                        <div class="hero-stat-label">Довольных пользователей</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">₽2.5М+</div>
+                        <div class="hero-stat-label">Управляемых финансов</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">24/7</div>
+                        <div class="hero-stat-label">Поддержка</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Все, что нужно для управления финансами</h2>
+                <p class="section-subtitle">
+                    Современные инструменты для полного контроля над вашими деньгами
+                </p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-pie"></i>
+                        </div>
+                        <h3 class="feature-title">Умная аналитика</h3>
+                        <p class="feature-description">
+                            Наглядные графики и отчеты покажут, куда уходят ваши деньги 
+                            и как оптимизировать расходы
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="feature-title">Финансовые цели</h3>
+                        <p class="feature-description">
+                            Ставьте цели и отслеживайте прогресс. Накопите на мечту 
+                            с помощью умного планирования
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="feature-title">Автоматизация</h3>
+                        <p class="feature-description">
+                            Автоматическая категоризация расходов и умные напоминания 
+                            помогут не упустить важное
+                        </p>
+                    </div>
+                </div>
+
+                <div class="demo-preview">
+                    <h3>Посмотрите, как это работает</h3>
+                    <div class="demo-image">
+                        Интерфейс Money in Sight - Управляйте финансами легко
+                    </div>
+                    <p>Красивый и понятный интерфейс, который делает управление финансами простым и приятным</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Money in Sight</h3>
+                        <p>Умный финансовый трекер для современного человека</p>
+                        <div class="inn">
+                             Аксенов Данил Владимирович<br>
+                            ИНН: 236905955901
+                        </div>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Контакты</h3>
+                        <a href="mailto:support@moneyinsight.ru">aksenovvvv1804@gmail.com</a>
+                        <a href="tel:+79182466044">(918) 246 60 44</a>
+                        <p>Техническая поддержка: 24/7</p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Документы</h3>
+                        <a href="#" onclick="showTermsModal()">Пользовательское соглашение</a>
+                        <a href="#" onclick="showPrivacyModal()">Политика конфиденциальности</a>
+                        <a href="#" onclick="showOfferModal()">Публичная оферта</a>
+                        <a href="#" onclick="showRefundModal()">Политика возвратов</a>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h3>Способы оплаты</h3>
+                        <p>ЮMoney • Банковские карты • СБП</p>
+                        <div class="payment-security">
+                            <i class="fas fa-lock"></i>
+                            <p>Безопасные платежи через ЮKassa</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Money in Sight. Все права защищены.</p>
+                    <p> Аксенов Данил Владимирович, ИНН 236905955901</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="app-container" id="appContainer">
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#" class="nav-link" data-page="profile"><i class="fas fa-user"></i> <span>Мой профиль</span></a></li>
+                <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-chart-line"></i> <span>Дашборд</span></a></li>
+                <li><a href="#" class="nav-link" data-page="transactions"><i class="fas fa-exchange-alt"></i> <span>Транзакции</span></a></li>
+                <li><a href="#" class="nav-link" data-page="tasks"><i class="fas fa-tasks"></i> <span>Задачи</span></a></li>
+                <li><a href="#" class="nav-link" data-page="analytics"><i class="fas fa-chart-pie"></i> <span>Аналитика</span></a></li>
+                <li><a href="#" class="nav-link" data-page="goals"><i class="fas fa-bullseye"></i> <span>Цели</span></a></li>
+                <li><a href="#" class="nav-link" data-page="debts"><i class="fas fa-hand-holding-usd"></i> <span>Долги</span></a></li>
+                <li><a href="#" class="nav-link" data-page="subscription"><i class="fas fa-crown"></i> <span>Подписка</span></a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="page" id="profile">
+                <div class="page-title">
+                    <h2>Мой профиль</h2>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <h3>Основная информация</h3>
+                        <div class="user-profile-info">
+                            <div class="profile-field">
+                                <label>Имя:</label>
+                                <span id="profileName">-</span>
+                                <button class="btn btn-outline action-btn" onclick="editField('name')">Изменить</button>
+                            </div>
+                            <div class="profile-field">
+                                <label>Email:</label>
+                                <span id="profileEmail">-</span>
+                            </div>
+                            <div class="profile-field">
+                                <label>Дата регистрации:</label>
+                                <span id="profileCreatedAt">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h3>Подписка</h3>
+                        <div id="profileSubscriptionStatus">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <h3>Опасная зона</h3>
+                    <div class="danger-zone">
+                        <div class="danger-item">
+                            <h4>Выйти из аккаунта</h4>
+                            <p>Завершить текущую сессию</p>
+                            <button class="btn btn-outline" onclick="handleLogout()">Выйти</button>
+                        </div>
+                        <div class="danger-item">
+                            <h4>Удалить аккаунт</h4>
+                            <p>Безвозвратно удалить все данные</p>
+                            <button class="btn btn-danger" onclick="showDeleteAccountModal()">Удалить аккаунт</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page active" id="dashboard">
+                <div class="page-title">
+                    <h2>Дашборд</h2>
+                    <span id="currentDate"></span>
+                </div>
+                
+                <div class="quick-actions">
+                    <div class="quick-action" onclick="showAddTransactionModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Добавить операцию</h3>
+                    </div>
+                    <div class="quick-action" onclick="showAddTaskModal()">
+                        <i class="fas fa-tasks"></i>
+                        <h3>Новая задача</h3>
+                    </div>
+                    <div class="quick-action" onclick="showPage('analytics')">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Аналитика</h3>
+                    </div>
+                    <div class="quick-action" onclick="showPage('goals')">
+                        <i class="fas fa-bullseye"></i>
+                        <h3>Мои цели</h3>
+                    </div>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card income">
+                        <h3>Доходы</h3>
+                        <div class="amount" id="totalIncome">0 ₽</div>
+                    </div>
+                    <div class="stat-card expense">
+                        <h3>Расходы</h3>
+                        <div class="amount" id="totalExpense">0 ₽</div>
+                    </div>
+                    <div class="stat-card balance">
+                        <h3>Баланс</h3>
+                        <div class="amount" id="totalBalance">0 ₽</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <h3>Последние транзакции</h3>
+                    <div class="transactions-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Тип</th>
+                                    <th>Описание</th>
+                                    <th>Категория</th>
+                                    <th>Сумма</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allTransactions">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page" id="transactions">
+                <div class="page-title">
+                    <h2>Транзакции</h2>
+                    <button class="btn btn-primary" onclick="showAddTransactionModal()">Добавить транзакцию</button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Тип</th>
+                                <th>Описание</th>
+                                <th>Категория</th>
+                                <th>Сумма</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionsTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="page" id="tasks">
+                <div class="page-title">
+                    <h2>Задачи</h2>
+                    <button class="btn btn-primary" onclick="showAddTaskModal()">Добавить задачу</button>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Описание</th>
+                                <th>Приоритет</th>
+                                <th>Дата выполнения</th>
+                                <th>Статус</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tasksTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="page" id="analytics">
+                <div class="page-title">
+                    <h2>Аналитика</h2>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <h3>Общие расходы</h3>
+                        <div class="amount" id="totalExpensesAnalytics">0 ₽</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Общие доходы</h3>
+                        <div class="amount" id="totalIncomeAnalytics">0 ₽</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Самые частые категории</h3>
+                        <div class="amount" id="topCategories">-</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <h3>Расходы по категориям</h3>
+                    <canvas id="categoryChart" height="250"></canvas>
+                </div>
+            </div>
+
+            <div class="page" id="goals">
+                <div class="page-title">
+                    <h2>Финансовые цели</h2>
+                    <button class="btn btn-primary" onclick="showAddGoalModal()">Новая цель</button>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <h3>Всего целей</h3>
+                        <div class="amount" id="totalGoals">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Выполнено</h3>
+                        <div class="amount" id="completedGoals">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>В процессе</h3>
+                        <div class="amount" id="activeGoals">0</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Целевая сумма</th>
+                                <th>Текущая сумма</th>
+                                <th>Прогресс</th>
+                                <th>Дата цели</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="goalsTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="page" id="debts">
+                <div class="page-title">
+                    <h2>Учет долгов</h2>
+                    <button class="btn btn-primary" onclick="showAddDebtModal()">Добавить долг</button>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card income">
+                        <h3>Мне должны</h3>
+                        <div class="amount" id="totalDebtsToMe">0 ₽</div>
+                    </div>
+                    <div class="stat-card expense">
+                        <h3>Я должен</h3>
+                        <div class="amount" id="totalMyDebts">0 ₽</div>
+                    </div>
+                    <div class="stat-card balance">
+                        <h3>Чистая позиция</h3>
+                        <div class="amount" id="netDebtPosition">0 ₽</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Тип</th>
+                                <th>Кто/кому</th>
+                                <th>Сумма</th>
+                                <th>Описание</th>
+                                <th>Срок возврата</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="debtsTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="page" id="subscription">
+                <div class="page-title">
+                    <h2>Подписка Money in Sight</h2>
+                </div>
+                
+                <div id="subscriptionStatus"></div>
+                
+                <div class="subscription-plans">
+                    <div class="plan-card">
+                        <div class="plan-name">Бесплатный</div>
+                        <div class="plan-price">0 ₽</div>
+                        <div class="plan-period">навсегда</div>
+                        <ul class="plan-features">
+                            <li>Базовый учет доходов и расходов</li>
+                            <li>До 50 транзакций в месяц</li>
+                            <li>Ограниченная аналитика</li>
+                            <li>Без целей и задач</li>
+                            <li>Реклама в приложении</li>
+                        </ul>
+                        <button class="btn btn-outline" disabled>Текущий план</button>
+                    </div>
+                    
+                    <div class="plan-card featured">
+                        <div class="plan-name">Премиум</div>
+                        <div class="plan-price">199 ₽</div>
+                        <div class="plan-period">в месяц</div>
+                        <ul class="plan-features">
+                            <li>Неограниченное количество транзакций</li>
+                            <li>Расширенная аналитика и отчеты</li>
+                            <li>Финансовые цели и задачи</li>
+                            <li>Учет долгов и кредитов</li>
+                            <li>Экспорт данных в Excel</li>
+                            <li>Приоритетная поддержка</li>
+                            <li>Без рекламы</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="openPaymentModal()">Выбрать тариф</button>
+                    </div>
+                </div>
+
+                <div class="payment-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Безопасная оплата через ЮMoney</h4>
+                    <p>Все платежи защищены технологиями ЮKassa. Мы не храним данные вашей карты.</p>
+                </div>
+
+                <div class="table-container">
+                    <h4>Юридическая информация</h4>
+                    <div class="inn">
+                        <strong> Аксенов Данил Владимирович</strong><br>
+                        ИНН: 236905955901<br>
+                        Адрес:х.Лебеди, ул. Полевая, д. 1<br>
+                        Телефон: (918) 246 60 44<br>
+                        Email: aksenovvvv1804@gmail.com
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <a href="#" onclick="showTermsModal()">Пользовательское соглашение</a> • 
+                        <a href="#" onclick="showPrivacyModal()">Политика конфиденциальности</a> • 
+                        <a href="#" onclick="showOfferModal()">Публичная оферта</a> • 
+                        <a href="#" onclick="showRefundModal()">Политика возвратов</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальные окна -->
+    <div class="modal" id="addTransactionModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addTransactionModal')">&times;</span>
+            <h2 class="modal-title">Добавить транзакцию</h2>
+            <form id="transactionForm">
+                <div class="form-group">
+                    <label>Тип</label>
+                    <select class="form-control" id="transactionType" required>
+                        <option value="income">Доход</option>
+                        <option value="expense">Расход</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Сумма</label>
+                    <input type="number" class="form-control" id="transactionAmount" placeholder="0" required step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Категория</label>
+                    <select class="form-control" id="transactionCategory" required>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Описание</label>
+                    <input type="text" class="form-control" id="transactionDescription" placeholder="Описание операции">
+                </div>
+                <div class="form-group">
+                    <label>Дата</label>
+                    <input type="date" class="form-control" id="transactionDate" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addTaskModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addTaskModal')">&times;</span>
+            <h2 class="modal-title">Добавить задачу</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label>Название</label>
+                    <input type="text" class="form-control" id="taskTitle" placeholder="Название задачи" required>
+                </div>
+                <div class="form-group">
+                    <label>Описание</label>
+                    <textarea class="form-control" id="taskDescription" placeholder="Описание задачи" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Приоритет</label>
+                        <select class="form-control" id="taskPriority" required>
+                            <option value="low">Низкий</option>
+                            <option value="medium" selected>Средний</option>
+                            <option value="high">Высокий</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Дата выполнения</label>
+                        <input type="date" class="form-control" id="taskDueDate">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addGoalModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addGoalModal')">&times;</span>
+            <h2 class="modal-title">Новая финансовая цель</h2>
+            <form id="goalForm">
+                <div class="form-group">
+                    <label>Название цели</label>
+                    <input type="text" class="form-control" id="goalTitle" placeholder="Например: Накопить на машину" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Целевая сумма</label>
+                        <input type="number" class="form-control" id="goalAmount" placeholder="0" required step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Текущие накопления</label>
+                        <input type="number" class="form-control" id="goalCurrent" placeholder="0" value="0" step="0.01">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Дата цели</label>
+                        <input type="date" class="form-control" id="goalDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Категория цели</label>
+                        <select class="form-control" id="goalCategory">
+                            <option value="auto">Автомобиль</option>
+                            <option value="travel">Путешествие</option>
+                            <option value="house">Недвижимость</option>
+                            <option value="education">Образование</option>
+                            <option value="other">Другое</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Создать цель</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addDebtModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('addDebtModal')">&times;</span>
+            <h2 class="modal-title">Добавить долг</h2>
+            <form id="debtForm">
+                <div class="form-group">
+                    <label>Тип долга</label>
+                    <select class="form-control" id="debtType" required>
+                        <option value="debt_income">Мне должны</option>
+                        <option value="debt_expense">Я должен</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Сумма</label>
+                    <input type="number" class="form-control" id="debtAmount" placeholder="0" required step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Кто/кому</label>
+                    <input type="text" class="form-control" id="debtPerson" placeholder="Имя человека или организация" required>
+                </div>
+                <div class="form-group">
+                    <label>Описание</label>
+                    <input type="text" class="form-control" id="debtDescription" placeholder="Описание долга">
+                </div>
+                <div class="form-group">
+                    <label>Срок возврата</label>
+                    <input type="date" class="form-control" id="debtDueDate">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Добавить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
+            <h2 class="modal-title">Регистрация в Money in Sight</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Имя</label>
+                    <input type="text" id="registerName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="registerPassword" class="form-control" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="agreeTerms" required>
+                        Я соглашаюсь с <a href="#" onclick="showTermsModal()">пользовательским соглашением</a> 
+                        и <a href="#" onclick="showPrivacyModal()">политикой конфиденциальности</a>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Начать 14 дней бесплатно
+                </button>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p>Уже есть аккаунт? <a href="#" onclick="closeModal('registerModal'); openModal('loginModal')">Войти</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
+            <h2 class="modal-title">Вход в Money in Sight</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+                <div style="text-align: center; margin-top: 20px;">
+                    <p>Нет аккаунта? <a href="#" onclick="closeModal('loginModal'); openModal('registerModal')">Зарегистрироваться</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('paymentModal')">&times;</span>
+            <h2 class="modal-title">Оформление подписки Money in Sight</h2>
+            
+            <div class="form-container">
+                <h3>Премиум подписка</h3>
+                <div class="plan-price" style="text-align: center; font-size: 2.5rem; margin: 20px 0;">199 ₽/месяц</div>
+                
+                <div class="payment-security">
+                    <i class="fas fa-lock"></i>
+                    <p>Безопасные платежи через ЮKassa</p>
+                </div>
+                
+                <form id="paymentForm">
+                    <div class="form-group">
+                        <label>Email для чека</label>
+                        <input type="email" class="form-control" id="paymentEmail" required>
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method selected" onclick="selectPaymentMethod('yoomoney')">
+                            <i class="fas fa-wallet"></i>
+                            <span>ЮMoney</span>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="selectedPaymentMethod" value="yoomoney">
+                    
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="paymentAgree" required>
+                            Я соглашаюсь с автоматическим продлением подписки и <a href="#" onclick="showOfferModal()">условиями оферты</a>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                        Оплатить 199 ₽
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="paymentProcessingModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('paymentProcessingModal')">&times;</span>
+            <h2 class="modal-title">Создание платежа</h2>
+            <div class="payment-loading">
+                <div class="loader"></div>
+                <p>Пожалуйста, подождите...</p>
+                <p>Создаем платежную ссылку</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="paymentSuccessModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('paymentSuccessModal')">&times;</span>
+            <div class="payment-success">
+                <i class="fas fa-check-circle"></i>
+                <h2>Оплата успешна!</h2>
+                <p>Премиум подписка активирована</p>
+                <p style="color: var(--gray); font-size: 0.9rem; margin-top: 10px;">
+                    Спасибо за покупку! Подписка будет действовать 30 дней.
+                </p>
+                <button class="btn btn-primary" onclick="closeModal('paymentSuccessModal')" style="margin-top: 20px;">
+                    Продолжить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="termsModal">
+        <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+            <span class="close-modal" onclick="closeModal('termsModal')">&times;</span>
+            <h2 class="modal-title">Пользовательское соглашение</h2>
+            <div class="form-container">
+                <h3>Условия использования Money in Sight</h3>
+                <p><strong>Дата последнего обновления:</strong> 2025</p>
+                
+                <h4>1. Общие положения</h4>
+                <p>1.1. Настоящее Пользовательское соглашение регулирует отношения между вами (Пользователем) и ИП Аксенов Данил Владимирович (ИНН 236905955901) относительно использования сервиса Money in Sight.</p>
+                
+                <h4>2. Условия подписки</h4>
+                <p>2.1. Бесплатный пробный период длится 14 дней с момента регистрации.</p>
+                <p>2.2. По окончании пробного периода подписка автоматически переходит в платный режим.</p>
+                <p>2.3. Стоимость подписки составляет 199 рублей в месяц.</p>
+                
+                <h4>3. Оплата и возвраты</h4>
+                <p>3.1. Оплата производится через сервис ЮMoney.</p>
+                <p>3.2. Возврат средств возможен в течение 14 дней с момента оплаты.</p>
+                
+                <h4>4. Контакты</h4>
+                <p>Email: aksenovvvv1804@gmail.com</p>
+                <p>Телефон: (918) 246 60 44</p>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="closeModal('termsModal')">Я понимаю</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="privacyModal">
+        <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+            <span class="close-modal" onclick="closeModal('privacyModal')">&times;</span>
+            <h2 class="modal-title">Политика конфиденциальности</h2>
+            <div class="form-container">
+                <h3>Защита ваших данных</h3>
+                
+                <h4>1. Сбор информации</h4>
+                <p>Мы собираем только необходимую информацию для работы сервиса: email, финансовые транзакции, цели и задачи.</p>
+                
+                <h4>2. Использование информации</h4>
+                <p>Ваши данные используются исключительно для предоставления услуг Money in Sight.</p>
+                
+                <h4>3. Защита данных</h4>
+                <p>Все данные шифруются и хранятся на защищенных серверах.</p>
+                
+                <h4>4. Третьи стороны</h4>
+                <p>Мы не передаем ваши данные третьим лицам, за исключением случаев, требуемых законодательством.</p>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="closeModal('privacyModal')">Я понимаю</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="offerModal">
+        <div class="modal-content" style="max-width: 800px; max-height: 80vh; overflow-y: auto;">
+            <span class="close-modal" onclick="closeModal('offerModal')">&times;</span>
+            <h2 class="modal-title">Публичная оферта</h2>
+            <div class="form-container">
+                <h3>Договор-оферта на оказание услуг</h3>
+                
+                <p><strong>Исполнитель:</strong>  Аксенов Данил Владимирович</p>
+                <p><strong>ИНН:</strong> 236905955901</p>
+                <p><strong>Адрес:</strong> х.Лебеди , ул. Полевая д. 1</p>
+                <p><strong>Тел.:</strong> (918) 246 60 44</p>
+                
+                <h4>1. Предмет договора</h4>
+                <p>1.1. Исполнитель предоставляет Пользователю доступ к сервису Money in Sight.</p>
+                
+                <h4>2. Стоимость услуг</h4>
+                <p>2.1. Стоимость подписки составляет 199 рублей в месяц.</p>
+                
+                <h4>3. Порядок оплаты</h4>
+                <p>3.1. Оплата осуществляется через платежную систему ЮMoney.</p>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="closeModal('offerModal')">Я понимаю</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="refundModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close-modal" onclick="closeModal('refundModal')">&times;</span>
+            <h2 class="modal-title">Политика возвратов</h2>
+            <div class="form-container">
+                <h3>Условия возврата средств</h3>
+                
+                <p><strong>Срок возврата:</strong> 14 дней с момента оплаты</p>
+                <p><strong>Основания для возврата:</strong></p>
+                <ul>
+                    <li>Технические неполадки сервиса</li>
+                    <li>Некорректное списание средств</li>
+                    <li>Двойная оплата</li>
+                </ul>
+                
+                <p><strong>Для запроса возврата:</strong> aksenovvvv1804@gmail.com</p>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="closeModal('refundModal')">Я понимаю</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteAccountModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('deleteAccountModal')">&times;</span>
+            <h2 class="modal-title">Удаление аккаунта</h2>
+            <div class="form-container">
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--danger); font-size: 3rem; margin-bottom: 20px;"></i>
+                    <h3>Внимание! Это действие необратимо</h3>
+                    <p>При удалении аккаунта будут безвозвратно удалены:</p>
+                    <ul>
+                        <li>Все ваши транзакции</li>
+                        <li>Финансовые цели</li>
+                        <li>Задачи и напоминания</li>
+                        <li>История долгов</li>
+                        <li>Данные подписки</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label>Для подтверждения введите ваш email:</label>
+                    <input type="email" class="form-control" id="confirmEmail" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="confirmDelete" required>
+                        Я понимаю, что все данные будут удалены без возможности восстановления
+                    </label>
+                </div>
+                <button type="button" class="btn btn-danger" style="width: 100%;" onclick="deleteAccount()" id="deleteAccountBtn" disabled>
+                    Удалить аккаунт навсегда
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editNameModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('editNameModal')">&times;</span>
+            <h2 class="modal-title">Изменение имени</h2>
+            <form id="editNameForm">
+                <div class="form-group">
+                    <label>Ваше имя</label>
+                    <input type="text" class="form-control" id="newUserName" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="emailVerificationModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeEmailVerificationModal()">&times;</span>
+            <h2 class="modal-title">Подтверждение email</h2>
+            <div class="form-container">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i class="fas fa-envelope" style="font-size: 3rem; color: var(--primary);"></i>
+                    <p style="margin: 15px 0;">Код подтверждения отправлен на:</p>
+                    <p id="verificationEmail" style="font-weight: bold; font-size: 1.1rem;"></p>
+                </div>
+                
+                <form id="verificationForm">
+                    <div class="form-group">
+                        <label>Введите код из письма</label>
+                        <input type="text" class="form-control" id="verificationCode" 
+                               placeholder="123456" maxlength="6" required
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    </div>
+                    
+                    <div style="text-align: center; margin: 20px 0;">
+                        <div id="timer" style="font-size: 0.9rem; color: var(--gray);">
+                            Отправить код повторно через: <span id="countdown">60</span> сек
+                        </div>
+                        <button type="button" class="btn btn-outline" id="resendCodeBtn" 
+                                onclick="resendVerificationCode()" disabled style="margin-top: 10px;">
+                            Отправить код повторно
+                        </button>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        Подтвердить и создать аккаунт
+                    </button>
+                </form>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button type="button" class="btn btn-outline" onclick="goBackToRegistration()">
+                        ← Назад к регистрации
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<style>
+    
+</style>
+    <!-- Уведомления будут добавляться динамически -->
+
+    <!-- Наши скрипты -->
+    <script src="./js/firebase.js"></script>
+     <script src="./js/modal-manager.js"></script>
+    <script src="./js/auth.js"></script>
+    <script src="./js/auth-verification.js"></script> 
+    <script src="./js/data.js"></script>
+    <script src="./js/ui.js"></script>
+    <script src="./js/payments.js"></script>
+    <script src="./js/app.js"></script>
+</body>
+</html>
