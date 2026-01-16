@@ -190,10 +190,7 @@ async function loginUser(email, password) {
         
         console.log('🔐 Попытка входа:', email);
         
-        // Проверяем регистрацию в процессе
-        if (window._registrationState && window._registrationState.inProgress) {
-            throw new Error('Регистрация в процессе, попробуйте позже');
-        }
+        // Убрана проверка на регистрацию в процессе для разрешения входа
         
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
         const user = userCredential.user;
