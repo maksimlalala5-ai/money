@@ -473,6 +473,27 @@ function resetModalForms(modalId) {
 }
 
 // Настройка форм
+function setupForms() {
+    // Настройка формы добавления транзакции
+    const transactionForm = document.getElementById('transactionForm');
+    if (transactionForm) {
+        transactionForm.addEventListener('submit', handleTransactionSubmit);
+    }
+    
+    // Настройка формы добавления цели
+    const goalForm = document.getElementById('goalForm');
+    if (goalForm) {
+        goalForm.addEventListener('submit', handleGoalSubmit);
+    }
+    
+    // Настройка формы добавления задачи
+    const taskForm = document.getElementById('taskForm');
+    if (taskForm) {
+        taskForm.addEventListener('submit', handleTaskSubmit);
+    }
+    
+    console.log('✅ Формы настроены');
+}
 
 
 // Инициализация формы транзакции
