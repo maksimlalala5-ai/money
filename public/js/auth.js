@@ -662,6 +662,24 @@ async function batchDeleteUnverifiedUsers() {
 }
 
 
+// Сброс пароля
+async function resetPassword() {
+    const email = prompt('Введите ваш email для сброса пароля:');
+    if (!email) return;
+    
+    try {
+        const { auth } = window.firebaseApp.getFirebaseServices();
+        await auth.sendPasswordResetEmail(email);
+        window.UI.showNotification('Письмо для сброса пароля отправлено на ваш email', 'success');
+    } catch (error) {
+        console.error('❌ Ошибка сброса пароля:', error);
+        window.UI.showNotification('Ошибка отправки письма для сброса пароля', 'error');
+    }
+}
+
+// Делаем функцию глобальной
+window.resetPassword = resetPassword;
+
 // Экспорт функций
 window.Auth = {
     initializeAuth,
@@ -670,5 +688,6 @@ window.Auth = {
     logoutUser,
     updateUserProfile,
     getCurrentUser: () => currentUser,
-    handleRegistrationWithUI
+    handleRegistrationWithUI,
+    resetPassword
 };
