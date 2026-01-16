@@ -26,7 +26,7 @@ async function initializeAuth() {
                         const userData = userDoc.data();
                         
                         // Проверяем: требуется ли верификация email?
-                        if (false && userData.emailVerified === false && !window._registrationState?.skipVerificationCheck) { // Временно отключено для тестирования
+                        if (userData.emailVerified === false && !window._registrationState?.skipVerificationCheck) {
                             console.log('📧 Email требует верификации - показываем модаль верификации');
                             // Пользователь зарегистрирован, но email не верифицирован
                             // Показываем страницу приветствия, не приложение
@@ -105,9 +105,6 @@ async function registerUser(name, email, password) {
                 displayName: name
             });
             
-            // Отправляем email verification от Firebase
-            await user.sendEmailVerification();
-            
             // Создаем запись в Firestore
             const trialEnd = new Date();
             trialEnd.setDate(trialEnd.getDate() + 14);
@@ -157,7 +154,24 @@ async function registerUser(name, email, password) {
             if (!emailResponse.ok) {
                 const errorText = await emailResponse.text();
                 console.error('⚠️ Ошибка отправки письма:', emailResponse.status, errorText);
-                // Не прерываем регистрацию, продолжаем
+                
+                // Удаляем пользователя из Auth, поскольку email не отправлен
+                try {
+                    await user.delete();
+                    console.log('✅ Пользователь удален из Auth из-за ошибки отправки email');
+                } catch (deleteErr) {
+                    console.error('❌ Ошибка удаления пользователя:', deleteErr);
+                }
+                
+                // Удаляем документ из Firestore
+                try {
+                    await db.collection('users').doc(user.uid).delete();
+                    console.log('✅ Документ пользователя удален из Firestore');
+                } catch (deleteErr) {
+                    console.error('❌ Ошибка удаления документа:', deleteErr);
+                }
+                
+                throw new Error('Не удалось отправить письмо подтверждения. Пожалуйста, попробуйте позже.');
             }
             
             // Сохраняем состояние для верификации, но НЕ сохраняем пароль в памяти

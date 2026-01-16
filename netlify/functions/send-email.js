@@ -111,16 +111,13 @@ exports.handler = async function(event, context) {
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`❌ Ошибка EmailJS API (статус ${response.status}):`, errorText);
-            // Для тестирования, возвращаем success даже при ошибке
-            console.log('⚠️ Email не отправлен, но продолжаем регистрацию для тестирования');
             return {
-                statusCode: 200,
+                statusCode: 500,
                 headers,
                 body: JSON.stringify({ 
-                    success: true,
-                    message: 'Email sent (test mode - not actually sent)',
-                    code: verification_code,
-                    test_mode: true
+                    success: false,
+                    error: 'Не удалось отправить письмо. Пожалуйста, попробуйте позже.',
+                    details: process.env.NODE_ENV === 'production' ? undefined : errorText
                 })
             };
         }
