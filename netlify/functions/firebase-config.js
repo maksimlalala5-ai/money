@@ -19,6 +19,8 @@ exports.handler = async function(event, context) {
     }
 
     try {
+        console.log('Firebase config function called, NODE_ENV:', process.env.NODE_ENV);
+        
         const firebaseConfig = {
             apiKey: process.env.FIREBASE_API_KEY,
             authDomain: process.env.FIREBASE_AUTH_DOMAIN,
