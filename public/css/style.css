@@ -52,6 +52,16 @@ header {
     padding: 15px 0;
 }
 
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--dark);
+    padding: 10px;
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -440,7 +450,62 @@ header {
     }
     
     .sidebar {
+        position: fixed;
+        top: 80px;
+        left: -280px;
+        width: 280px;
+        height: calc(100vh - 80px);
+        z-index: 1001;
+        transition: left 0.3s ease;
+    }
+    
+    .sidebar.open {
+        left: 0;
+    }
+    
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 80px;
+        left: 0;
         width: 100%;
+        height: calc(100vh - 80px);
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+    
+    .sidebar-overlay.show {
+        display: block;
+    }
+    
+    .mobile-menu-toggle {
+        display: block !important;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--dark);
+        padding: 10px;
+    }
+    
+    .main-content {
+        padding: 20px;
+    }
+    
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
     }
 }
 
@@ -1076,6 +1141,16 @@ label {
 }
 
 /* Адаптивные стили */
+@media (max-width: 1200px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .main-content {
+        padding: 30px 15px;
+    }
+}
+
 @media (max-width: 992px) {
     .hero-title {
         font-size: 3rem;
@@ -1087,6 +1162,14 @@ label {
     
     .plan-card.featured {
         transform: none;
+    }
+    
+    .stats-cards {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    
+    .quick-actions {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     }
 }
 
@@ -1112,6 +1195,7 @@ label {
     .modal-content {
         padding: 20px;
         margin: 10px;
+        max-width: calc(100vw - 20px);
     }
     
     .payment-methods {
@@ -1120,11 +1204,31 @@ label {
     
     .table-container {
         padding: 15px;
+        overflow-x: auto;
     }
     
     th, td {
         padding: 8px 10px;
         font-size: 0.9rem;
+        white-space: nowrap;
+    }
+    
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .stat-card {
+        padding: 20px;
+    }
+    
+    .quick-action {
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .logo {
+        font-size: 1.4rem;
     }
 }
 
