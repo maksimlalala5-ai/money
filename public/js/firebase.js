@@ -37,11 +37,26 @@ async function initializeFirebase() {
         } else {
             // Для продакшена загружаем с Netlify функции
             console.log('🌐 Продакшен - загружаем Firebase конфиг');
-            const response = await fetch('/.netlify/functions/firebase-config');
-            if (!response.ok) {
-                throw new Error('Не удалось загрузить конфигурацию Firebase');
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+            
+            try {
+                const response = await fetch('/.netlify/functions/firebase-config', {
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error('Не удалось загрузить конфигурацию Firebase');
+                }
+                firebaseConfig = await response.json();
+            } catch (error) {
+                clearTimeout(timeoutId);
+                if (error.name === 'AbortError') {
+                    throw new Error('Timeout при загрузке конфигурации Firebase');
+                }
+                throw error;
             }
-            firebaseConfig = await response.json();
         }
 
         // Проверка конфигурации
