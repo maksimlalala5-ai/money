@@ -286,6 +286,43 @@ async function addGoal(goalData) {
     }
 }
 
+// Обновление финансовой цели
+async function updateGoal(goalId, updateData) {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        if (!window.firebase || !window.firebase.firestore) {
+            throw new Error('Firebase Firestore не инициализирован');
+        }
+        
+        // Проверяем принадлежность цели
+        const goalDoc = await db.collection('goals').doc(goalId).get();
+        
+        if (!goalDoc.exists) throw new Error('Цель не найдена');
+        if (goalDoc.data().userId !== user.uid) throw new Error('Нет прав для редактирования');
+        
+        const updatedGoal = {
+            ...updateData,
+            progress: (updateData.current / updateData.target) * 100,
+            updatedAt: window.firebase && window.firebase.firestore
+                ? window.firebase.firestore.FieldValue.serverTimestamp()
+                : null
+        };
+        
+        await db.collection('goals').doc(goalId).update(updatedGoal);
+        console.log('🎯 Цель обновлена:', goalId);
+        
+        return { success: true };
+        
+    } catch (error) {
+        console.error('❌ Ошибка обновления цели:', error);
+        throw error;
+    }
+}
+
 // Получение целей пользователя
 async function getGoals() {
     try {
@@ -312,6 +349,135 @@ async function getGoals() {
         
     } catch (error) {
         console.error('❌ Ошибка загрузки целей:', error);
+        throw error;
+    }
+}
+
+// === НАКОПЛЕНИЯ ===
+
+// Добавление раздела накоплений
+async function addSaving(savingData) {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        if (!window.firebase || !window.firebase.firestore) {
+            throw new Error('Firebase Firestore не инициализирован');
+        }
+        
+        const saving = {
+            ...savingData,
+            userId: user.uid,
+            progress: (savingData.current / savingData.target) * 100,
+            createdAt: window.firebase && window.firebase.firestore
+                ? window.firebase.firestore.FieldValue.serverTimestamp()
+                : null,
+            updatedAt: window.firebase && window.firebase.firestore
+                ? window.firebase.firestore.FieldValue.serverTimestamp()
+                : null
+        };
+        
+        const docRef = await db.collection('savings').add(saving);
+        console.log('💰 Раздел накоплений добавлен:', docRef.id);
+        
+        return { success: true, id: docRef.id };
+        
+    } catch (error) {
+        console.error('❌ Ошибка добавления раздела накоплений:', error);
+        throw error;
+    }
+}
+
+// Получение разделов накоплений пользователя
+async function getSavings() {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        const snapshot = await db.collection('savings')
+            .where('userId', '==', user.uid)
+            .orderBy('createdAt', 'desc')
+            .get();
+        
+        const savings = [];
+        snapshot.forEach(doc => {
+            savings.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        
+        console.log(`💰 Загружено ${savings.length} разделов накоплений`);
+        return savings;
+        
+    } catch (error) {
+        console.error('❌ Ошибка загрузки разделов накоплений:', error);
+        throw error;
+    }
+}
+
+// Обновление раздела накоплений
+async function updateSaving(savingId, updateData) {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        if (!window.firebase || !window.firebase.firestore) {
+            throw new Error('Firebase Firestore не инициализирован');
+        }
+        
+        // Проверяем принадлежность раздела
+        const savingDoc = await db.collection('savings').doc(savingId).get();
+        
+        if (!savingDoc.exists) throw new Error('Раздел накоплений не найден');
+        if (savingDoc.data().userId !== user.uid) throw new Error('Нет прав для редактирования');
+        
+        const updatedSaving = {
+            ...updateData,
+            progress: (updateData.current / updateData.target) * 100,
+            updatedAt: window.firebase && window.firebase.firestore
+                ? window.firebase.firestore.FieldValue.serverTimestamp()
+                : null
+        };
+        
+        await db.collection('savings').doc(savingId).update(updatedSaving);
+        console.log('💰 Раздел накоплений обновлен:', savingId);
+        
+        return { success: true };
+        
+    } catch (error) {
+        console.error('❌ Ошибка обновления раздела накоплений:', error);
+        throw error;
+    }
+}
+
+// Удаление раздела накоплений
+async function deleteSaving(savingId) {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        // Проверяем принадлежность раздела
+        const savingDoc = await db.collection('savings').doc(savingId).get();
+        
+        if (!savingDoc.exists) throw new Error('Раздел накоплений не найден');
+        if (savingDoc.data().userId !== user.uid) throw new Error('Нет прав для удаления');
+        
+        await db.collection('savings').doc(savingId).delete();
+        console.log('🗑️ Раздел накоплений удален:', savingId);
+        
+        return { success: true };
+        
+    } catch (error) {
+        console.error('❌ Ошибка удаления раздела накоплений:', error);
         throw error;
     }
 }
@@ -457,7 +623,6 @@ async function getAnalytics(period = 'month') {
     }
 }
 
-// Экспорт функций
 window.Data = {
     CATEGORIES,
     addTransaction,
@@ -466,10 +631,18 @@ window.Data = {
     updateTask,       
     deleteTask,       
     updateGoal,       
-    deleteGoal,   
+    deleteGoal,
     addGoal,
     getGoals,
     addTask,
     getTasks,
-    getAnalytics
+    getAnalytics,
+    addDebt,          
+    getDebts,         
+    updateDebt,       
+    deleteDebt,       
+    addSaving,        
+    getSavings,       
+    updateSaving,     
+    deleteSaving     
 };

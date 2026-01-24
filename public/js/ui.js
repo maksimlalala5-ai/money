@@ -29,8 +29,28 @@ function setupNavigation() {
             e.preventDefault();
             const pageId = this.getAttribute('data-page');
             showPage(pageId);
+            // Закрываем мобильное меню после выбора страницы
+            closeMobileMenu();
         });
     });
+    
+    // Обработчик для мобильного меню
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    if (mobileMenuToggle) {
+        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+    }
+    
+    // Обработчик для overlay
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeMobileMenu);
+    }
+    
+    // Обработчик для кнопки закрытия sidebar
+    const closeSidebar = document.getElementById('closeSidebar');
+    if (closeSidebar) {
+        closeSidebar.addEventListener('click', closeMobileMenu);
+    }
 }
 
 // Настройка модальных окон
@@ -41,162 +61,6 @@ function setupModals() {
 // Настройка форм
 function setupForms() {
     // Формы настраиваются в app.js
-}
-
-// В ui.js добавить:
-
-// Загрузка данных накоплений
-async function loadSavingsData() {
-    try {
-        const savings = await window.Data.getSavings();
-        displaySavings(savings);
-    } catch (error) {
-        console.error('❌ Ошибка загрузки накоплений:', error);
-        showNotification('Не удалось загрузить накопления', 'error');
-    }
-}
-
-// Отображение накоплений
-function displaySavings(savings) {
-    const tbody = document.getElementById('savingsTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = '';
-    
-    savings.forEach(saving => {
-        const row = document.createElement('tr');
-        
-        const progress = Math.min(100, (saving.current / saving.target) * 100);
-        const targetDate = saving.targetDate ? new Date(saving.targetDate) : null;
-        
-        row.innerHTML = `
-            <td>${saving.title}</td>
-            <td>${parseFloat(saving.target).toFixed(2)} ₽</td>
-            <td>${parseFloat(saving.current).toFixed(2)} ₽</td>
-            <td>
-                <div class="progress">
-                    <div class="progress-bar" style="width: ${progress}%">
-                        ${Math.round(progress)}%
-                    </div>
-                </div>
-            </td>
-            <td>${saving.category || '-'}</td>
-            <td>${targetDate ? targetDate.toLocaleDateString('ru-RU') : '-'}</td>
-            <td>
-                <button class="btn btn-sm btn-outline" onclick="editSaving('${saving.id}')">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-outline btn-danger" onclick="deleteSaving('${saving.id}')">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        `;
-        
-        tbody.appendChild(row);
-    });
-    
-    // Обновляем статистику
-    document.getElementById('totalSavings').textContent = savings.length;
-    document.getElementById('totalSavingsAmount').textContent = 
-        savings.reduce((sum, s) => sum + (parseFloat(s.current) || 0), 0).toFixed(2) + ' ₽';
-    document.getElementById('savingsTarget').textContent = 
-        savings.reduce((sum, s) => sum + (parseFloat(s.target) || 0), 0).toFixed(2) + ' ₽';
-}
-
-// Форма добавления накоплений
-function initializeSavingForm() {
-    // Устанавливаем дату цели (через месяц)
-    const nextMonth = new Date();
-    nextMonth.setMonth(nextMonth.getMonth() + 1);
-    const savingDate = document.getElementById('savingDate');
-    if (savingDate) {
-        savingDate.valueAsDate = nextMonth;
-    }
-}
-
-// Обработка формы накоплений
-async function handleSavingSubmit(e) {
-    e.preventDefault();
-    
-    const title = document.getElementById('savingTitle').value.trim();
-    const target = parseFloat(document.getElementById('savingAmount').value);
-    const current = parseFloat(document.getElementById('savingCurrent').value) || 0;
-    const targetDate = document.getElementById('savingDate').value;
-    const category = document.getElementById('savingCategory').value.trim();
-    
-    if (!title || !target || target <= 0) {
-        showNotification('Заполните обязательные поля', 'error');
-        return;
-    }
-    
-    if (current > target) {
-        showNotification('Текущая сумма не может превышать целевую', 'error');
-        return;
-    }
-    
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    const originalText = submitBtn.textContent;
-    
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Создание...';
-    submitBtn.disabled = true;
-    
-    try {
-        await window.Data.addSaving({
-            title,
-            target,
-            current,
-            targetDate: targetDate ? new Date(targetDate) : null,
-            category
-        });
-        
-        showNotification('Накопление успешно создано', 'success');
-        closeModal('addSavingModal');
-        
-        // Обновляем страницу накоплений
-        if (document.getElementById('savings').classList.contains('active')) {
-            await loadSavingsData();
-        }
-        
-    } catch (error) {
-        showNotification(error.message, 'error');
-    } finally {
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-    }
-}
-
-// Глобальные функции
-window.editSaving = (savingId) => {
-    showNotification('Редактирование накоплений будет доступно в следующем обновлении', 'info');
-};
-
-window.deleteSaving = async (savingId) => {
-    if (!confirm('Вы уверены, что хотите удалить это накопление?')) return;
-    
-    try {
-        await window.Data.deleteSaving(savingId);
-        showNotification('Накопление удалено', 'success');
-        
-        if (document.getElementById('savings').classList.contains('active')) {
-            await loadSavingsData();
-        }
-    } catch (error) {
-        showNotification(error.message, 'error');
-    }
-};
-
-// Обновляем loadPageData:
-async function loadPageData(pageId) {
-    try {
-        switch (pageId) {
-            // ... существующие case ...
-            case 'savings':
-                await loadSavingsData();
-                break;
-        }
-    } catch (error) {
-        console.error(`❌ Ошибка загрузки данных для страницы ${pageId}:`, error);
-    }
 }
 
 // Показать страницу
@@ -244,6 +108,9 @@ async function loadPageData(pageId) {
                 break;
             case 'goals':
                 await loadGoalsData();
+                break;
+            case 'savings':
+                await loadSavingsData();
                 break;
             case 'tasks':
                 await loadTasksData();
@@ -506,6 +373,59 @@ function displayGoals(goals) {
     document.getElementById('activeGoals').textContent = goals.filter(g => g.progress < 100).length;
 }
 
+// Загрузка данных накоплений
+async function loadSavingsData() {
+    try {
+        const savings = await window.Data.getSavings();
+        displaySavings(savings);
+    } catch (error) {
+        console.error('❌ Ошибка загрузки накоплений:', error);
+        showNotification('Не удалось загрузить накопления', 'error');
+    }
+}
+
+// Отображение накоплений
+function displaySavings(savings) {
+    const tbody = document.getElementById('savingsTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    savings.forEach(saving => {
+        const row = document.createElement('tr');
+        
+        const progress = Math.min(100, (saving.current / saving.target) * 100);
+        
+        row.innerHTML = `
+            <td>${saving.title}</td>
+            <td>${parseFloat(saving.target).toFixed(2)} ₽</td>
+            <td>${parseFloat(saving.current).toFixed(2)} ₽</td>
+            <td>
+                <div class="progress">
+                    <div class="progress-bar" style="width: ${progress}%">
+                        ${Math.round(progress)}%
+                    </div>
+                </div>
+            </td>
+            <td>
+                <button class="btn btn-sm btn-outline" onclick="editSaving('${saving.id}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline btn-danger" onclick="deleteSaving('${saving.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+    
+    // Обновляем статистику накоплений
+    document.getElementById('totalSavings').textContent = savings.length;
+    document.getElementById('totalSavingsAmount').textContent = savings.reduce((sum, s) => sum + parseFloat(s.current), 0).toFixed(2) + ' ₽';
+    document.getElementById('activeSavings').textContent = savings.filter(s => s.progress < 100).length;
+}
+
 // Загрузка данных задач
 async function loadTasksData() {
     try {
@@ -650,6 +570,18 @@ function setupForms() {
     const goalForm = document.getElementById('goalForm');
     if (goalForm) {
         goalForm.addEventListener('submit', handleGoalSubmit);
+    }
+    
+    // Настройка формы редактирования цели
+    const editGoalForm = document.getElementById('editGoalForm');
+    if (editGoalForm) {
+        editGoalForm.addEventListener('submit', handleEditGoalSubmit);
+    }
+    
+    // Настройка формы добавления раздела накоплений
+    const savingForm = document.getElementById('savingForm');
+    if (savingForm) {
+        savingForm.addEventListener('submit', handleSavingSubmit);
     }
     
     // Настройка формы добавления задачи
@@ -900,6 +832,97 @@ async function handleGoalSubmit(e) {
     }
 }
 
+// Обработка редактирования цели
+async function handleEditGoalSubmit(e) {
+    e.preventDefault();
+    
+    const goalId = document.getElementById('editGoalId').value;
+    const title = document.getElementById('editGoalTitle').value.trim();
+    const target = parseFloat(document.getElementById('editGoalAmount').value);
+    const current = parseFloat(document.getElementById('editGoalCurrent').value) || 0;
+    const targetDate = document.getElementById('editGoalDate').value;
+    const category = document.getElementById('editGoalCategory').value.trim();
+    
+    if (!title || !target || target <= 0) {
+        showNotification('Заполните обязательные поля', 'error');
+        return;
+    }
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Сохранение...';
+    submitBtn.disabled = true;
+    
+    try {
+        await window.Data.updateGoal(goalId, {
+            title,
+            target,
+            current,
+            targetDate: new Date(targetDate),
+            category
+        });
+        
+        showNotification('Цель успешно обновлена', 'success');
+        closeModal('editGoalModal');
+        
+        // Обновляем страницу целей
+        if (document.getElementById('goals').classList.contains('active')) {
+            await loadGoalsData();
+        }
+        
+    } catch (error) {
+        showNotification(error.message, 'error');
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
+// Обработка добавления раздела накоплений
+async function handleSavingSubmit(e) {
+    e.preventDefault();
+    
+    const title = document.getElementById('savingTitle').value.trim();
+    const target = parseFloat(document.getElementById('savingTarget').value);
+    const current = parseFloat(document.getElementById('savingCurrent').value) || 0;
+    const description = document.getElementById('savingDescription').value.trim();
+    
+    if (!title || !target || target <= 0) {
+        showNotification('Заполните обязательные поля', 'error');
+        return;
+    }
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Создание...';
+    submitBtn.disabled = true;
+    
+    try {
+        await window.Data.addSaving({
+            title,
+            target,
+            current,
+            description
+        });
+        
+        showNotification('Раздел накоплений создан', 'success');
+        closeModal('addSavingModal');
+        
+        // Обновляем страницу накоплений
+        if (document.getElementById('savings').classList.contains('active')) {
+            await loadSavingsData();
+        }
+        
+    } catch (error) {
+        showNotification(error.message, 'error');
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+}
+
 // Обработка добавления задачи
 async function handleTaskSubmit(e) {
     e.preventDefault();
@@ -1119,8 +1142,32 @@ window.deleteTask = async (taskId) => {
 };
 
 // Управление целями
-window.editGoal = (goalId) => {
-    showNotification('Редактирование целей пока не реализовано', 'info');
+window.editGoal = async (goalId) => {
+    try {
+        // Получаем данные цели
+        const goals = await window.Data.getGoals();
+        const goal = goals.find(g => g.id === goalId);
+        
+        if (!goal) {
+            showNotification('Цель не найдена', 'error');
+            return;
+        }
+        
+        // Заполняем форму редактирования
+        document.getElementById('editGoalId').value = goal.id;
+        document.getElementById('editGoalTitle').value = goal.title;
+        document.getElementById('editGoalAmount').value = goal.target;
+        document.getElementById('editGoalCurrent').value = goal.current || 0;
+        document.getElementById('editGoalDate').value = goal.targetDate ? new Date(goal.targetDate.toDate()).toISOString().split('T')[0] : '';
+        document.getElementById('editGoalCategory').value = goal.category || '';
+        
+        // Открываем модал
+        openModal('editGoalModal');
+        
+    } catch (error) {
+        showNotification('Ошибка загрузки данных цели', 'error');
+        console.error('Error loading goal for edit:', error);
+    }
 };
 
 window.deleteGoal = async (goalId) => {
@@ -1132,6 +1179,25 @@ window.deleteGoal = async (goalId) => {
         
         if (document.getElementById('goals').classList.contains('active')) {
             await loadGoalsData();
+        }
+    } catch (error) {
+        showNotification(error.message, 'error');
+    }
+};
+
+window.editSaving = (savingId) => {
+    showNotification('Редактирование разделов накоплений пока не реализовано', 'info');
+};
+
+window.deleteSaving = async (savingId) => {
+    if (!confirm('Вы уверены, что хотите удалить этот раздел накоплений?')) return;
+    
+    try {
+        await window.Data.deleteSaving(savingId);
+        showNotification('Раздел накоплений удален', 'success');
+        
+        if (document.getElementById('savings').classList.contains('active')) {
+            await loadSavingsData();
         }
     } catch (error) {
         showNotification(error.message, 'error');
@@ -1276,6 +1342,27 @@ function showRefundModal() {
     openModal('refundModal');
 }
 
+// Функции для мобильного меню
+function toggleMobileMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (sidebar && overlay) {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('show');
+    }
+}
+
+function closeMobileMenu() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (sidebar && overlay) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+    }
+}
+
 // Экспорт функций
 window.UI = {
     initializeUI,
@@ -1289,10 +1376,12 @@ window.UI = {
     loadGoalsData,
     loadTasksData,
     loadProfileData,
+    loadSavingsData,
     showAddTransactionModal: () => openModal('addTransactionModal'),
     showAddGoalModal: () => openModal('addGoalModal'),
     showAddTaskModal: () => openModal('addTaskModal'),
     showAddDebtModal: () => openModal('addDebtModal'),
+    showAddSavingModal: () => openModal('addSavingModal'),
     editField,
     toggleTask,
     deleteTask,
@@ -1305,5 +1394,7 @@ window.UI = {
     showOfferModal,
     showRefundModal,
     showDeleteAccountModal,
-    deleteAccount
+    deleteAccount,
+    toggleMobileMenu,
+    closeMobileMenu
 };

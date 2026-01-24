@@ -16,8 +16,19 @@ async function initializeApp() {
         // Инициализируем аутентификацию
         await window.Auth.initializeAuth();
 
-        // Инициализируем платежную систему
+// Инициализируем платежную систему
         await window.Payments.initializePayments();
+        
+        // Регистрируем Service Worker для PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('✅ Service Worker зарегистрирован:', registration);
+                })
+                .catch((error) => {
+                    console.error('❌ Ошибка регистрации Service Worker:', error);
+                });
+        }
         
         // Настраиваем глобальные обработчики
         setupGlobalHandlers();
