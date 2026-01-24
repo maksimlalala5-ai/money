@@ -1828,3 +1828,440 @@ input:checked + .slider:before {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/* Добавить в конец style.css */
+
+/* ======== УЛУЧШЕННАЯ АДАПТИВНОСТЬ ======== */
+
+/* Экстра-малые устройства (телефоны, меньше 400px) */
+@media (max-width: 400px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+    
+    .feature-card {
+        padding: 20px 15px;
+    }
+    
+    .modal-content {
+        padding: 15px;
+        margin: 10px;
+    }
+    
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .stats-cards {
+        grid-template-columns: 1fr;
+    }
+    
+    .quick-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .table-container {
+        padding: 10px;
+        overflow-x: auto;
+    }
+    
+    th, td {
+        padding: 6px 8px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+    
+    .plan-card {
+        padding: 20px 15px;
+    }
+    
+    .plan-price {
+        font-size: 2rem;
+    }
+}
+
+/* Планшеты (от 401px до 768px) */
+@media (min-width: 401px) and (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .subscription-plans {
+        grid-template-columns: 1fr;
+    }
+    
+    .plan-card.featured {
+        transform: none;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .payment-methods {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 250px;
+    }
+}
+
+/* Ландшафтная ориентация телефонов */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero {
+        padding: 40px 0;
+    }
+    
+    .hero-stats {
+        margin-top: 20px;
+    }
+    
+    .modal-content {
+        max-height: 85vh;
+    }
+}
+
+/* Высокие устройства */
+@media (min-height: 1000px) {
+    .hero {
+        padding: 150px 0 100px;
+    }
+    
+    .features {
+        padding: 100px 0;
+    }
+}
+
+/* Улучшения для таблиц на мобильных */
+@media (max-width: 640px) {
+    table {
+        display: block;
+    }
+    
+    thead {
+        display: none;
+    }
+    
+    tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 10px;
+    }
+    
+    tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    
+    tbody td:last-child {
+        border-bottom: none;
+    }
+    
+    tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--dark);
+        min-width: 120px;
+    }
+    
+    .action-buttons {
+        justify-content: flex-end;
+    }
+}
+
+/* Улучшенные стили для модальных окон на мобильных */
+@media (max-width: 576px) {
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+        padding: 20px 15px;
+    }
+    
+    .modal-title {
+        font-size: 1.3rem;
+    }
+    
+    .form-control {
+        padding: 10px 12px;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+    }
+}
+
+/* Улучшения для страницы подписок */
+@media (max-width: 768px) {
+    .subscription-plans {
+        gap: 20px;
+    }
+    
+    .plan-card {
+        padding: 25px 20px;
+    }
+    
+    .plan-features li {
+        padding: 8px 0;
+        font-size: 0.9rem;
+    }
+}
+
+/* Фиксация футера при скролле на мобильных */
+@media (max-width: 768px) {
+    body {
+        position: relative;
+        min-height: 100vh;
+    }
+    
+    .footer {
+        margin-top: 40px;
+    }
+}
+
+/* Улучшения для форм на маленьких экранах */
+@media (max-width: 480px) {
+    #verificationCode {
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+        padding: 12px;
+    }
+    
+    .hero-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    
+    .hero-stat-number {
+        font-size: 1.8rem;
+    }
+    
+    .hero-stat-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* Улучшения для страницы профиля */
+@media (max-width: 768px) {
+    .profile-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .profile-field label {
+        min-width: auto;
+    }
+    
+    .profile-field span {
+        margin: 5px 0;
+        width: 100%;
+    }
+    
+    .danger-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .danger-item button {
+        align-self: stretch;
+    }
+}
+
+/* Анимации для мобильных */
+@media (max-width: 768px) {
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .quick-action:hover {
+        transform: translateY(-3px);
+    }
+}
+
+/* Исправление горизонтального скролла */
+@media (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+    
+    .container {
+        overflow-x: hidden;
+    }
+    
+    .table-container {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 999;
+    background: var(--gradient);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+}
+
+.sidebar {
+    width: 280px;
+    background: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.mobile-open {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    background: var(--gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.sidebar-header .user-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+}
+
+.sidebar-header .user-info {
+    flex: 1;
+}
+
+.sidebar-header .user-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.sidebar-header .user-email {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.close-sidebar {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+    height: calc(100vh - 130px);
+    overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .app-container .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .app-container .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+    }
+    
+    .main-content {
+        padding: 20px;
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 769px) {
+    .app-container {
+        display: flex;
+    }
+    
+    .mobile-menu-toggle {
+        display: none;
+    }
+    
+    .sidebar {
+        position: relative;
+        transform: translateX(0) !important;
+        height: 100vh;
+    }
+    
+    .main-content {
+        flex: 1;
+        padding: 40px;
+        overflow-y: auto;
+    }
+}
+
+/* Улучшения для меню на телефонах */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 85%;
+    }
+    
+    .sidebar-header {
+        padding: 20px 15px;
+    }
+    
+    .sidebar-menu a {
+        padding: 12px 20px;
+    }
+}

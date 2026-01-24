@@ -252,6 +252,94 @@ async function loginUser(email, password) {
     }
 }
 
+function saveSession(user) {
+    if (!user) return;
+    
+    const sessionData = {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        lastLogin: new Date().toISOString()
+    };
+    
+    localStorage.setItem('moneySight_session', JSON.stringify(sessionData));
+    
+    // Сохраняем токен для автоматического входа
+    user.getIdToken().then(token => {
+        localStorage.setItem('moneySight_token', token);
+    }).catch(() => {
+        // Игнорируем ошибки получения токена
+    });
+}
+
+// Проверка сохраненной сессии
+async function checkSavedSession() {
+    try {
+        const sessionData = localStorage.getItem('moneySight_session');
+        const savedToken = localStorage.getItem('moneySight_token');
+        
+        if (!sessionData || !savedToken) {
+            return null;
+        }
+        
+        const { auth } = getFirebaseServices();
+        
+        // Проверяем токен
+        const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${firebaseConfig.apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ idToken: savedToken })
+        });
+        
+        if (!response.ok) {
+            // Токен недействителен, очищаем
+            clearSession();
+            return null;
+        }
+        
+        return JSON.parse(sessionData);
+        
+    } catch (error) {
+        console.error('Ошибка проверки сессии:', error);
+        clearSession();
+        return null;
+    }
+}
+
+// Очистка сессии
+function clearSession() {
+    localStorage.removeItem('moneySight_session');
+    localStorage.removeItem('moneySight_token');
+}
+
+// Обновляем onAuthStateChanged в initializeAuth:
+auth.onAuthStateChanged(async (user) => {
+    currentUser = user;
+
+    if (user) {
+        console.log('👤 Пользователь в системе:', user.email);
+        saveSession(user); // Сохраняем сессию
+        
+        // Остальной код...
+    } else {
+        console.log('🚪 Пользователь вышел');
+        clearSession();
+        showWelcome();
+    }
+});
+
+// Добавляем автоматическую проверку при загрузке
+async function tryAutoLogin() {
+    const savedSession = await checkSavedSession();
+    if (savedSession) {
+        console.log('🔄 Пытаемся автоматический вход...');
+        // Здесь можно попробовать автоматический вход через сохраненный токен
+    }
+}
+
+// Вызываем при инициализации
+tryAutoLogin();
+
 // Выход пользователя
 async function logoutUser() {
     try {
