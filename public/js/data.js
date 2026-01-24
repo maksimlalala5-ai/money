@@ -623,6 +623,125 @@ async function getAnalytics(period = 'month') {
     }
 }
 
+// === ДОЛГИ ===
+
+// Добавление долга
+async function addDebt(debtData) {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        if (!window.firebase || !window.firebase.firestore) {
+            throw new Error('Firebase Firestore не инициализирован');
+        }
+        
+        const debt = {
+            ...debtData,
+            userId: user.uid,
+            createdAt: window.firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: window.firebase.firestore.FieldValue.serverTimestamp()
+        };
+        
+        const docRef = await db.collection('debts').add(debt);
+        console.log('💸 Долг добавлен:', docRef.id);
+        
+        return { success: true, id: docRef.id };
+        
+    } catch (error) {
+        console.error('❌ Ошибка добавления долга:', error);
+        throw error;
+    }
+}
+
+// Получение долгов
+async function getDebts() {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        const snapshot = await db.collection('debts')
+            .where('userId', '==', user.uid)
+            .orderBy('createdAt', 'desc')
+            .get();
+        
+        const debts = [];
+        snapshot.forEach(doc => {
+            debts.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        
+        console.log(`💸 Загружено ${debts.length} долгов`);
+        return debts;
+        
+    } catch (error) {
+        console.error('❌ Ошибка загрузки долгов:', error);
+        throw error;
+    }
+}
+
+// Обновление долга
+async function updateDebt(debtId, updateData) {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        if (!window.firebase || !window.firebase.firestore) {
+            throw new Error('Firebase Firestore не инициализирован');
+        }
+        
+        // Проверяем принадлежность долга
+        const debtDoc = await db.collection('debts').doc(debtId).get();
+        
+        if (!debtDoc.exists) throw new Error('Долг не найден');
+        if (debtDoc.data().userId !== user.uid) throw new Error('Нет прав для редактирования');
+        
+        await db.collection('debts').doc(debtId).update({
+            ...updateData,
+            updatedAt: window.firebase.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('💸 Долг обновлен:', debtId);
+        
+        return { success: true };
+        
+    } catch (error) {
+        console.error('❌ Ошибка обновления долга:', error);
+        throw error;
+    }
+}
+
+// Удаление долга
+async function deleteDebt(debtId) {
+    try {
+        const { db } = getFirebaseServices();
+        const user = window.Auth.getCurrentUser();
+        
+        if (!user) throw new Error('Пользователь не авторизован');
+        
+        // Проверяем принадлежность долга
+        const debtDoc = await db.collection('debts').doc(debtId).get();
+        
+        if (!debtDoc.exists) throw new Error('Долг не найден');
+        if (debtDoc.data().userId !== user.uid) throw new Error('Нет прав для удаления');
+        
+        await db.collection('debts').doc(debtId).delete();
+        console.log('🗑️ Долг удален:', debtId);
+        
+        return { success: true };
+        
+    } catch (error) {
+        console.error('❌ Ошибка удаления долга:', error);
+        throw error;
+    }
+}
+
 window.Data = {
     CATEGORIES,
     addTransaction,

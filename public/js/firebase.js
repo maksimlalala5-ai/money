@@ -76,12 +76,11 @@ async function initializeFirebase() {
 
         // Настройка для локальной разработки
         if (IS_LOCAL) {
-            console.log('⚠️ Локальная разработка - данные будут сохранены в реальном Firebase');
-            // Для локальной разработки можно использовать эмуляторы
-            // Раскомментируйте при необходимости:
-            // auth.useEmulator("http://localhost:9099");
-            // db.useEmulator("localhost", 8080);
-            // db.settings({ host: "localhost:8080", ssl: false });
+            console.log('⚠️ Локальная разработка - используем эмуляторы Firebase');
+            // Используем эмуляторы для локальной разработки
+            auth.useEmulator("http://localhost:9099");
+            db.useEmulator("localhost", 8080);
+            db.settings({ host: "localhost:8080", ssl: false });
         }
 
         firebaseInitialized = true;
