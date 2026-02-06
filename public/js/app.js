@@ -16,7 +16,7 @@ async function initializeApp() {
         // Инициализируем аутентификацию
         await window.Auth.initializeAuth();
 
-// Инициализируем платежную систему
+        // Инициализируем платежную систему
         await window.Payments.initializePayments();
         
         // Регистрируем Service Worker для PWA

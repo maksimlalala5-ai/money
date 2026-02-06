@@ -44,7 +44,7 @@ function getFirebaseServices() {
 async function updateTask(taskId, updateData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -72,7 +72,7 @@ async function updateTask(taskId, updateData) {
 async function deleteTask(taskId) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -97,7 +97,7 @@ async function deleteTask(taskId) {
 async function deleteGoal(goalId) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -121,7 +121,7 @@ async function deleteGoal(goalId) {
 async function updateGoal(goalId, updateData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -152,7 +152,7 @@ async function updateGoal(goalId, updateData) {
 async function addTransaction(transactionData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -187,7 +187,7 @@ async function addTransaction(transactionData) {
 async function getTransactions(limit = 50, startAfter = null) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -223,7 +223,7 @@ async function getTransactions(limit = 50, startAfter = null) {
 async function deleteTransaction(transactionId) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -255,7 +255,7 @@ async function deleteTransaction(transactionId) {
 async function addGoal(goalData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -290,7 +290,7 @@ async function addGoal(goalData) {
 async function updateGoal(goalId, updateData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -327,7 +327,7 @@ async function updateGoal(goalId, updateData) {
 async function getGoals() {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -359,7 +359,7 @@ async function getGoals() {
 async function addSaving(savingData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -394,7 +394,7 @@ async function addSaving(savingData) {
 async function getSavings() {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -424,7 +424,7 @@ async function getSavings() {
 async function updateSaving(savingId, updateData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -461,7 +461,7 @@ async function updateSaving(savingId, updateData) {
 async function deleteSaving(savingId) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -488,7 +488,7 @@ async function deleteSaving(savingId) {
 async function addTask(taskData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -523,7 +523,7 @@ async function addTask(taskData) {
 async function getTasks() {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -555,7 +555,7 @@ async function getTasks() {
 async function getAnalytics(period = 'month') {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -629,7 +629,7 @@ async function getAnalytics(period = 'month') {
 async function addDebt(debtData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -659,7 +659,7 @@ async function addDebt(debtData) {
 async function getDebts() {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -689,7 +689,7 @@ async function getDebts() {
 async function updateDebt(debtId, updateData) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         
@@ -721,7 +721,7 @@ async function updateDebt(debtId, updateData) {
 async function deleteDebt(debtId) {
     try {
         const { db } = getFirebaseServices();
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         
         if (!user) throw new Error('Пользователь не авторизован');
         

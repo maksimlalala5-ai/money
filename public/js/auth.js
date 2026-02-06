@@ -92,7 +92,7 @@ async function registerUser(name, email, password) {
                 throw new Error('Firebase Firestore не инициализирован');
             }
             
-            const firestore = window.firebase.firestore;
+            const firebaseFirestore = window.firebase.firestore;
             
             // Создаем пользователя в Firebase Auth
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
@@ -118,8 +118,12 @@ async function registerUser(name, email, password) {
                 trialEndDate: trialEnd.toISOString(),
                 subscriptionActive: true,
                 profileComplete: true,
-                createdAt: firestore.FieldValue.serverTimestamp(),
-                lastLogin: firestore.FieldValue.serverTimestamp()
+                createdAt: window.firebase && window.firebase.firestore
+                    ? window.firebase.firestore.FieldValue.serverTimestamp()
+                    : null,
+                lastLogin: window.firebase && window.firebase.firestore
+                    ? window.firebase.firestore.FieldValue.serverTimestamp()
+                    : null
             });
             
             // Генерируем наш код для письма
@@ -134,7 +138,7 @@ async function registerUser(name, email, password) {
                 userId: user.uid,
                 expiresAt: codeExpiresAt.toISOString(),
                 attempts: 0,
-                createdAt: firestore.FieldValue.serverTimestamp()
+                createdAt: firebaseFirestore.FieldValue.serverTimestamp()
             });
 
             // Отправляем код на email
@@ -552,7 +556,6 @@ async function handleRegistrationWithUI(name, email, password) {
 async function cleanupUnverifiedUsers() {
     try {
         const { auth, db } = window.firebaseApp.getFirebaseServices();
-        const admin = require('firebase-admin');
         
         console.log('🧹 Начинаем очистку неподтвержденных пользователей...');
         

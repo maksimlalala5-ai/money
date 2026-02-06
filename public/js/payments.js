@@ -6,7 +6,7 @@ console.log('💳 Загрузка модуля платежей...');
 // Объявление функции заранее
 async function updateSubscriptionToPremium() {
     try {
-        const user = window.Auth.getCurrentUser();
+        const user = window.Auth?.getCurrentUser?.();
         if (!user) {
             console.error('❌ Пользователь не найден при обновлении подписки');
             return;

@@ -213,8 +213,12 @@ async function handleVerificationSubmit(e) {
         // 1. Обновляем emailVerified в Firestore
         await db.collection('users').doc(userId).update({
             emailVerified: true,
-            verifiedAt: firestore.FieldValue.serverTimestamp(),
-            updatedAt: firestore.FieldValue.serverTimestamp()
+            verifiedAt: window.firebase && window.firebase.firestore
+                ? window.firebase.firestore.FieldValue.serverTimestamp()
+                : null,
+            updatedAt: window.firebase && window.firebase.firestore
+                ? window.firebase.firestore.FieldValue.serverTimestamp()
+                : null
         });
         
         // 2. Удаляем использованный код
