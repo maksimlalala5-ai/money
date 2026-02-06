@@ -1,10 +1,38 @@
 // app.js - Основное приложение
 console.log('🚀 Money in Sight загружается...');
 
+// Функция для ожидания, пока модуль будет доступным
+function waitForModule(moduleName, timeout = 10000) {
+    return new Promise((resolve, reject) => {
+        const startTime = Date.now();
+        const checkInterval = setInterval(() => {
+            const module = window[moduleName];
+            if (module) {
+                clearInterval(checkInterval);
+                resolve(module);
+            } else if (Date.now() - startTime > timeout) {
+                clearInterval(checkInterval);
+                reject(new Error(`Module ${moduleName} не загружен за ${timeout}мс`));
+            }
+        }, 50);
+    });
+}
+
 // Инициализация приложения
 async function initializeApp() {
     try {
         console.log('🔧 Инициализация приложения...');
+        
+        // Ожидаем загрузки всех необходимых модулей
+        console.log('⏳ Ожидание загрузки модулей...');
+        await Promise.all([
+            waitForModule('firebaseApp', 8000),
+            waitForModule('Auth', 8000),
+            waitForModule('UI', 8000),
+            waitForModule('Data', 8000),
+            waitForModule('Payments', 8000)
+        ]);
+        console.log('✅ Все модули загружены');
         
         // Инициализируем Firebase
         await window.firebaseApp.initializeFirebase();
@@ -19,15 +47,15 @@ async function initializeApp() {
         // Инициализируем платежную систему
         await window.Payments.initializePayments();
         
-        // Регистрируем Service Worker для PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('✅ Service Worker зарегистрирован:', registration);
-                })
-                .catch((error) => {
-                    console.error('❌ Ошибка регистрации Service Worker:', error);
-                });
+        // Регистрируем Service Worker для PWA (только на desktop)
+        if ('serviceWorker' in navigator && window.innerWidth > 768) {
+            try {
+                const registration = await navigator.serviceWorker.register('/service-worker.js');
+                console.log('✅ Service Worker зарегистрирован:', registration);
+            } catch (error) {
+                console.warn('⚠️ Ошибка регистрации Service Worker:', error);
+                // На мобильных браузерах игнорируем ошибку Service Worker
+            }
         }
         
         // Настраиваем глобальные обработчики
@@ -40,7 +68,7 @@ async function initializeApp() {
         
     } catch (error) {
         console.error('❌ Ошибка загрузки приложения:', error);
-        showCriticalError('Не удалось загрузить приложение. Пожалуйста, обновите страницу.');
+        showCriticalError(`Не удалось загрузить приложение: ${error.message}\n\nПожалуйста, обновите страницу.`);
     }
 }
 
@@ -334,7 +362,28 @@ function showCriticalError(message) {
 }
 
 // Запуск приложения при загрузке страницы
-document.addEventListener('DOMContentLoaded', initializeApp);
+let appInitialized = false;
+
+async function safeInitializeApp() {
+    if (appInitialized) return;
+    appInitialized = true;
+    
+    console.log('🖥️ Устройство:', navigator.userAgent.substring(0, 50));
+    console.log('📱 Ширина экрана:', window.innerWidth);
+    console.log('🌐 Язык браузера:', navigator.language);
+    
+    try {
+        await initializeApp();
+    } catch (error) {
+        console.error('❌ Критическая ошибка:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', safeInitializeApp);
+window.addEventListener('load', safeInitializeApp); // Резервный вызов
+
+// Таймаут на случай, если события не сработают
+setTimeout(safeInitializeApp, 5000);
 
 // Экспорт функций для глобального использования
 window.handleLogout = handleLogout;
