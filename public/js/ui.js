@@ -245,7 +245,7 @@ function displayAllTransactions(transactions) {
 async function loadAnalyticsData() {
     try {
         const analytics = await window.Data.getAnalytics('month');
-        displayAnalytics(analytics);
+        await displayAnalytics(analytics);
     } catch (error) {
         console.error('❌ Ошибка загрузки аналитики:', error);
         showNotification('Не удалось загрузить аналитику', 'error');
@@ -253,18 +253,21 @@ async function loadAnalyticsData() {
 }
 
 // Отображение аналитики
-function displayAnalytics(analytics) {
+async function displayAnalytics(analytics) {
     document.getElementById('totalExpensesAnalytics').textContent = `${analytics.totalExpense.toFixed(2)} ₽`;
     document.getElementById('totalIncomeAnalytics').textContent = `${analytics.totalIncome.toFixed(2)} ₽`;
     
     // Создаем диаграмму категорий
-    createCategoryChart(analytics.categories);
+    await createCategoryChart(analytics.categories);
 }
 
 // Создание диаграммы категорий
-function createCategoryChart(categories) {
+async function createCategoryChart(categories) {
     const ctx = document.getElementById('categoryChart');
     if (!ctx) return;
+    
+    // Загружаем Chart.js если нужен
+    const Chart = await window.getChartJS();
     
     // ПРОВЕРЯЕМ, существует ли chart, и ТОЛЬКО ТОГДА вызываем destroy
     if (window.categoryChart && typeof window.categoryChart.destroy === 'function') {
